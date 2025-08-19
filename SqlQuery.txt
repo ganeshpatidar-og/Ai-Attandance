@@ -1,0 +1,47 @@
+-- Create the database
+CREATE DATABASE IF NOT EXISTS face_attendance;
+USE face_attendance;
+
+CREATE TABLE IF NOT EXISTS students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    mobile VARCHAR(15) NOT NULL,
+    class_section VARCHAR(20) NOT NULL,
+    year INT NOT NULL,
+    semester INT NOT NULL,
+    dob DATE NOT NULL,
+    enrollment_no VARCHAR(20) NOT NULL UNIQUE,
+    image_path VARCHAR(255) NOT NULL,
+    approved BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE IF NOT EXISTS face_encodings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    encoding TEXT NOT NULL,
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS subjects (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS attendance (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id VARCHAR(20) NOT NULL ,
+    date DATE NOT NULL,
+    time TIME NOT NULL,
+    FOREIGN KEY (student_id) REFERENCES students(enrollment_no) ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS marks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    subject_id INT NOT NULL,
+    marks INT NOT NULL,
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+    FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
+);
+alter table attendance add student_id1 varchar(20) not null;
+update attendance set student_id1 = student_id;
+alter table attendance drop student_id1;
